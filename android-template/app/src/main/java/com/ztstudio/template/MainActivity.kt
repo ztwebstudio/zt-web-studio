@@ -43,7 +43,7 @@ class MainActivity : Activity() {
         setContentView(container)
 
         webView.loadUrl(
-            "https://mdafroz252738-hash.github.io/zt-web-studio/"
+            "https://ztwebstudio.github.io/zt-web-studio/"
         )
     }
 
