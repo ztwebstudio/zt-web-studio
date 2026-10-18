@@ -1,7 +1,6 @@
 
 name: Build Android Debug APK
 
-
 on:
   push:
     branches:
@@ -13,7 +12,6 @@ on:
         required: true
         default: "ZT Test App"
         type: string
-
 
 permissions:
   contents: read
@@ -32,10 +30,15 @@ jobs:
         with:
           distribution: temurin
           java-version: "17"
+
       - name: Set up Android SDK
         uses: android-actions/setup-android@v3
+        with:
+          packages: platform-tools
+
       - name: Install Android SDK packages
-        run: sdkmanager "platform-tools" "platforms;android-35" "build-tools;35.0.0"
+        run: |
+          sdkmanager "platform-tools" "platforms;android-35" "build-tools;35.0.0"
 
       - name: Set up Gradle
         uses: gradle/actions/setup-gradle@v4
@@ -44,7 +47,7 @@ jobs:
 
       - name: Build debug APK
         env:
-          APP_DISPLAY_NAME: ${{ inputs.app_name }}
+          APP_DISPLAY_NAME: ${{ inputs.app_name || 'ZT Test App' }}
         run: |
           cd android-template
           gradle --no-daemon --stacktrace assembleDebug \
