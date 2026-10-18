@@ -3,39 +3,63 @@ package com.ztstudio.template
 
 import android.app.Activity
 import android.os.Bundle
+import android.webkit.WebView
+import android.webkit.WebViewClient
+import android.webkit.WebChromeClient
+import android.view.ViewGroup
+import android.widget.FrameLayout
+import android.widget.ProgressBar
 import android.graphics.Color
-import android.view.Gravity
-import android.widget.LinearLayout
-import android.widget.TextView
 
 class MainActivity : Activity() {
+
+    private lateinit var webView: WebView
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val layout = LinearLayout(this).apply {
-            orientation = LinearLayout.VERTICAL
-            gravity = Gravity.CENTER
-            setPadding(24, 24, 24, 24)
-            setBackgroundColor(Color.rgb(18, 18, 30))
+        val container = FrameLayout(this)
+
+        webView = WebView(this).apply {
+            settings.javaScriptEnabled = true
+            settings.domStorageEnabled = true
+            settings.allowFileAccess = false
+            settings.allowContentAccess = false
+
+            webViewClient = WebViewClient()
+            webChromeClient = WebChromeClient()
+
+            setBackgroundColor(Color.rgb(11, 16, 32))
         }
 
-        val title = TextView(this).apply {
-            text = "ZT Web Studio"
-            textSize = 28f
-            setTextColor(Color.WHITE)
-            gravity = Gravity.CENTER
-        }
+        container.addView(
+            webView,
+            FrameLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.MATCH_PARENT
+            )
+        )
 
-        val message = TextView(this).apply {
-            text = "Android app is running!"
-            textSize = 16f
-            setTextColor(Color.LTGRAY)
-            gravity = Gravity.CENTER
-            setPadding(0, 16, 0, 0)
-        }
+        setContentView(container)
 
-        layout.addView(title)
-        layout.addView(message)
-        setContentView(layout)
+        webView.loadUrl(
+            "https://mdafroz252738-hash.github.io/zt-web-studio/"
+        )
+    }
+
+    @Deprecated("Deprecated in Android")
+    override fun onBackPressed() {
+        if (::webView.isInitialized && webView.canGoBack()) {
+            webView.goBack()
+        } else {
+            super.onBackPressed()
+        }
+    }
+
+    override fun onDestroy() {
+        if (::webView.isInitialized) {
+            webView.destroy()
+        }
+        super.onDestroy()
     }
 }
