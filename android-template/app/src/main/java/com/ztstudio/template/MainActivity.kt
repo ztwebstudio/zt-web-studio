@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.ProgressBar
 import android.graphics.Color
+import android.view.WindowManager
 
 class MainActivity : Activity() {
 
@@ -17,6 +18,12 @@ class MainActivity : Activity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        window.statusBarColor = Color.rgb(11, 16, 32)
+window.navigationBarColor = Color.rgb(11, 16, 32)
+
+if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.R) {
+    window.setDecorFitsSystemWindows(true)
+}
 
         val container = FrameLayout(this)
 
